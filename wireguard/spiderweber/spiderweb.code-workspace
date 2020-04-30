@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "/Users/apple/workspace/go/src/github.com/spiderweber/spider"
+		},
+		{
+			"path": "/Users/apple/workspace/go/src/github.com/spiderweber/wasp"
+		},
+		{
+			"path": "/Users/apple/workspace/go/src/github.com/spiderweber/knot"
+		},
+		{
+			"path": "/Users/apple/workspace/go/src/github.com/spiderweber/nest"
+		},
+		{
+			"path": "/Users/apple/workspace/go/src/github.com/spiderweber/mosquito"
+		}
+	],
+	"settings": {}
+}

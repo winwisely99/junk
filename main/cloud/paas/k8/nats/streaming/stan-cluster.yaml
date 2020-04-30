@@ -1,0 +1,23 @@
+apiVersion: "streaming.nats.io/v1alpha1"
+kind: "NatsStreamingCluster"
+metadata:
+  name: "stan-pv"
+spec:
+  natsSvc: "nats"
+
+  config:
+    storeDir: "/pv/stan"
+    ftGroup: "stan"
+
+  # Define mounts in the Pod Spec
+  template:
+    spec:
+      volumes:
+      - name: stan-store-dir
+        persistentVolumeClaim:
+          claimName: streaming-pvc
+      containers:
+        - name: nats-streaming
+          volumeMounts:
+          - mountPath: /pv
+            name: stan-store-dir

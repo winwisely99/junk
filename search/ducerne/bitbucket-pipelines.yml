@@ -1,0 +1,7 @@
+image: node:8.1.0
+
+pipelines:
+  default:
+    - step:
+        script:
+          - ./tool/bitbucket-pipelines.sh
