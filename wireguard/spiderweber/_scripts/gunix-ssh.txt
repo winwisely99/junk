@@ -1,0 +1,4 @@
+# https://github.com/gun1x.keys
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIVH+fO2asxcSZuAMLfEHC/mHd6K9FpCL+9ylQ7EjCph gunix@gitlab
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGvPCh9IHS0KNUppFqgBY7xiz7i077zY0LEE0hiEXhUr gunix@gitlab
+

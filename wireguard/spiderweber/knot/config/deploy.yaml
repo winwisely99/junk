@@ -1,0 +1,21 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: wg-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wg-server
+  template:
+    metadata:
+      name: wg-server
+      labels:
+        app: wg-server
+    spec:
+      containers:
+      - name: wg-server
+        # This is the import path for the Go binary to build and run.
+        image: github.com/spiderweber/knot
+        ports:
+        - containerPort: 8080

@@ -1,0 +1,36 @@
+# https://github.com/pingcap/pd/tree/v3.0.7
+LIB_NAME=pd
+LIB=github.com/pingcap/$(LIB_NAME)
+LIB_BRANCH=master
+LIB_TAG=v3.0.7
+LIB_FSPATH=$(GOPATH)/src/$(LIB)
+
+# server (pd-server)
+LIB_BIN_NAME=$(LIB_NAME)-server
+LIB_BIN_FSPATH=$(GOPATH)/bin/$(LIB_BIN_NAME)
+
+# tools
+
+# pd-ctl
+LIB_BIN_CTL_NAME=$(LIB_NAME)-ctl
+LIB_BIN_CTL_FSPATH=$(GOPATH)/bin/$(LIB_BIN_CTL_NAME)
+
+# pd-recover 
+LIB_BIN_RECOVER_NAME=$(LIB_NAME)-recover
+LIB_BIN_RECOVER_FSPATH=$(GOPATH)/bin/$(LIB_BIN_RECOVER_NAME)
+
+# pd-tso-bench
+LIB_BIN_BENCH_NAME=$(LIB_NAME)-tso-bench
+LIB_BIN_BENCH_FSPATH=$(GOPATH)/bin/$(LIB_BIN_BENCH_NAME)
+
+
+GO111MODULE=on
+
+SAMPLE_NAME=
+SAMPLE_FSPATH=
+
+CLOUD_PROJECT_ID=
+CLOUD_PROJECT_URL=
+
+
+

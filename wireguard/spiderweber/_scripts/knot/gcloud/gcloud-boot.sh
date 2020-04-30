@@ -1,0 +1,6 @@
+# provision the node
+gcloud beta compute --project=winwisely99-vpn instances create knot --description="knot is the wireguard server" --zone=europe-west3-c --machine-type=f1-micro --subnet=default --network-tier=PREMIUM --can-ip-forward --maintenance-policy=MIGRATE --service-account=411280396658-compute@developer.gserviceaccount.com --scopes=https://www.googleapis.com/auth/cloud-platform --tags=http-server,https-server --image=ubuntu-1804-bionic-v20191211 --image-project=ubuntu-os-cloud --boot-disk-size=10GB --boot-disk-type=pd-standard --boot-disk-device-name=knot --reservation-affinity=any
+
+gcloud compute --project=winwisely99-vpn firewall-rules create default-allow-http --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
+
+gcloud compute --project=winwisely99-vpn firewall-rules create default-allow-https --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https-server

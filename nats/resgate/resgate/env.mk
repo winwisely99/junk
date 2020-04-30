@@ -1,0 +1,18 @@
+# https://github.com/resgateio/resgate/tree/v1.4.1
+LIB_NAME=resgate
+LIB=github.com/resgateio/$(LIB_NAME)
+LIB_BRANCH=master
+LIB_TAG=v1.4.1
+LIB_FSPATH=$(GOPATH)/src/$(LIB)
+
+LIB_BIN_NAME=$(LIB_NAME)
+LIB_BIN_FSPATH=$(GOPATH)/bin/$(LIB_BIN_NAME)
+
+GO111MODULE=on
+
+SAMPLE_NAME=
+SAMPLE_FSPATH=$(LIB_FSPATH)/$(SAMPLE_NAME)
+
+CLOUD_PROJECT_ID=
+CLOUD_PROJECT_URL=
+
