@@ -1,0 +1,6 @@
+build
+goreleaser
+jetstream
+nats-account-server
+nats-server
+nsc
