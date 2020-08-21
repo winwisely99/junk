@@ -1,36 +1,63 @@
 # Security
 
+
+## Intro
+
+
 End to End Encryption involves the following foundations.
 - EOW: Encrypted Over the Wire.
 - EAR: Encrypted At Rest.
 
-## Deployment options
+In order to build a working system there are many options, and this is a summary o them and which ones we are choosing.
 
-All Clients has Persistent state and a background worker, using the Service Worker pattern.
 
-Web PWA
-- Much harder to take down
-Web View PWA
-- Same as Web, but with easier usage as it creates a Desktop Icon
-Native ( Desktop and mobile)
-- Desktop
+## Client Deployment Options
+
+All Clients have durable state and a background worker (using the Service Worker style pattern).
+
+We run on all platforms using the same code base, and this gives us some level of defense from being blocked, as we can at least advise users to only use Web.
+However, i feel that only running the News and Org Directory on the web is also a very good idea because its ONLY a static web site.
+- SO the APP is only Desktop and Mobile which is 100% native and needs just IP addresses and sockets and can use mTLS, etc.
+
+Ease of Use:
+- Web PWA
+	- Much harder to take down, 
+- Web View PWA
+	- Same as Web, but with easier usage as it creates a Desktop Icon.
+- Native ( Desktop and mobile)
+	- Easiest to use and highest quality.
 
 White label approach:
-Deployment to Mobile requires a huge amount of hassle and you can be blocked.
+Deployment to Mobile requires a huge amount of hassle.
 Deployment to Desktop requires notary signing, and i am sure that can also eventually be blocked.
 So "white label" based sales approach is not really a practical option due to the amount or work.
 
-Defense from blocking:
-We run on all platforms using the same code base, and this gives us some level of defense from being blocked, as we can at least advise users to only use Web.
+How easy to block ?
+
 - Web
-	- requires ICANN ake down and NOT possible.
+	- requires ICANN take down of Domain and NOT possible.
+- Native
 - Mobile
-	- Android side loading is very possible.
-	- IOS side loading is not possible.
+	- Android side loading is very possible. But painful for users. Otherwise Google can easily block it but is unlikely to.
+	- IOS side loading is not possible, and so very easy for Apple to Block.
 - Desktop
-	- Windows does not block
+	- Windows does not block.
 	- Apple will eventually start blocking i expect or at least making it a PITA for the user.
 
+
+Easy to White Label ?
+
+- Web 
+	- Yes
+- Native
+	- Harder because you need Google, Microsoft and Apple store accounts
+	- Much more work with signing, but if we use Drone for CI and run our own CI Runners it will be easier.
+
+Easy to Secure ?
+- Web
+	- Less secure because state is held in the Index DB.
+- Native
+	- DB if golang can have custom encryption at rest if we use a KV Store.
 
 ## Notifications
 
