@@ -10,6 +10,8 @@ Web App
 	- No Auth or Authz needed.
 - Envoy and GPC-web
 	- Must get Envoy and Lets Encrypt working.
+	- Try to get Improbable working so we dont need envoy.
+		- will make it easy to do the Lets Encrypt then also !!
 - Data calls are GRPC
 - Blob calls are HTTP calls.
 - Golang Server does
@@ -54,7 +56,44 @@ Make the App Read / Write when offline
 - All Modules must be changed to support CRDT Ops style. Lots of work.
 
 
+### Ideal Deployment topology
 
+If we can make the Golang main server a single binary then Orgs can deploy the app as a Service to their laptops, and do nothing else.
+
+Gateway (ours)
+- All traffic flows through this.
+- We hold all the users public keys.
+- We do all the real auth, but cant see any of the data because its all encrypted against their own Client private keys.
+- We can do the auth though because we are running the TLS Certs and so can see the URLS they are hitting.
+- We run a TCP Tunnel for Each Orgs laptop ( or Server )
+- Because the Gateway and Tunnel are stateless then its very easy to run this as Services on any cloud.
+- SO a user that is a member of many Orgs
+	- they connect to our gateway
+	- We hold a tunnel connection to all their Orgs backend
+		- As messages come through we intermix them corectly.
+- This Archi makes using NATS between Us and the Org Servers really compelling because everything is Async, and so the connectivity issues between Us and the Org servers are much more stable.
+
+Tunnel (on ours and theirs)
+- Candidate:
+	- https://github.com/jpillora/chisel
+		- https://github.com/sumitkolhe/kintocli
+			- Has AUTH
+		- https://github.com/ryotarai/mallet/
+		
+Daemonisation ( on theirs)
+- Will be needed for Orgs to run the binaries reliably.
+- Candidates
+	- https://github.com/takama/daemon
+		- Has proper suppot for MAC and Windows
+
+
+Backend ( on theirs)
+- Run by Orgs
+- Needs to run as a single binary
+- GRPC with embedded
+	- NATS
+	- DB ( one that does CDC)
+	- All data if encrypted against the users own private key.
 
 ## Biz roadmap 
 
