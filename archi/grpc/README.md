@@ -1,8 +1,6 @@
 # GRPC
 
-## Deploy to Hetzner
 
-https://github.com/hetznercloud/cli
 
 ## Remove need for envoy
 
