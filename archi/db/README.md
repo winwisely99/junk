@@ -32,9 +32,6 @@ github.com/asdine/genji
 
 
 
-github.com/lni/dragonboat
-- users: https://github.com/search?q=lni%2Fdragonboat%2Fv3&type=Code
-
 
 https://github.com/mattn/go-sqlite3
 - NOT pure golang, but rock solid.
@@ -73,14 +70,6 @@ https://github.com/prologic/bitraft
 - server with redis API.
 
 
-File
-https://github.com/codenoid/file.io/blob/master/fileio.go#L78
-- He is putting the File into Badger as bytes array. 
-
-https://github.com/danskeren/imgasm.com
-- Uses Badger to hold a thumb, but uploads to backblaze for ever.
-- Backblaze is cheap and forver, and returns a MD5 ID to get it again later.
-- Works well and this is a smat way to solve store issues, because Files are the thing that kills you hosting your own stuff.
 
 Badger
 - Solid
@@ -113,6 +102,21 @@ https://github.com/attestantio/dirk/tree/master/rules
 	- Yes maybe in time we will. This is much more so if we store Files in badger DB
 	- BUT Sharding Badger DB means that we need to maintain a Mapping DB
 		- For each Type / Namespace we record the Server instance it exists in.
+		- Then GRPC Server calls into another GRPC Server to get the data for that namespace.
+		- Hell you could do this from the client !!
+			- Client has a GRPC endpoint for each Namespace.
+			- Its basically then a quasi microService setup.
+			- But Because the client is flutter this could work really well.
+			- ON boot of Servers, just need a Consul like discovery to say Server = GRPC namespace Y.
+
+
+The bad boy that does this....
+github.com/lni/dragonboat
+- raft based replication thats fast.
+- dev is really responsive too...
+- users: https://github.com/search?q=lni%2Fdragonboat%2Fv3&type=Code
+	- WOW alot of users. This is NOT beta ware...
+
 
 https://github.com/mkawserm/flamed/blob/master/go.mod
 - Has Badger, bleve and dragonboat & protobuf all in one !!!
@@ -130,13 +134,6 @@ pebble
 
 
 
-## Load balancing
-
-Will be needed.
-
-- Hate needing to put a load balancer in front.
-- Envoy can do it BUT very hard to control.
-- Investigate other options.
 
 
 ## SQL with Badger
@@ -157,6 +154,15 @@ Will be needed.
 	- just need to record the mapping of the chunnks to the File so we can reconstruct
 	- The BIG advantage is then when we need to sedn the file back to the Client, the file is ALREADY CHUNKED !!!
 		- SO will be faster and much less complex.
+
+
+https://github.com/codenoid/file.io/blob/master/fileio.go#L78
+- He is putting the File into Badger as bytes array. 
+
+https://github.com/danskeren/imgasm.com
+- Uses Badger to hold a thumb, but uploads to backblaze for ever.
+- Backblaze is cheap and forver, and returns a MD5 ID to get it again later.
+- Works well and this is a smat way to solve store issues, because Files are the thing that kills you hosting your own stuff.
 
 ## Protocol buffs to Badger mapping
 
