@@ -56,15 +56,33 @@ A Binary Server ( Google S3) then grabs the tars and puts them in the right fold
 
 ## Updating process
 
+For V1 we just do it all off github Actions:
+
+Use gorelease in the github actions
+https://github.com/goreleaser/goreleaser-action
+
+Use this inside the deployed binary.
+https://github.com/rhysd/go-github-selfupdate
+- Updates from Github releases
+
+For V1, we run our own CI:
+
 SO each deployed Server just polls the Binary Server for updates, based on its config.
 
 For flutter web and hugo, the deployed Server will then pull the tar and unpack it to the correct directory.
 
 For the main Server, the server will fork and replace
+
 - https://github.com/jpillora/overseer
 	- check it works on linux
 	- Desktops will be running the binary as a Service, check it works. Not sure it will.
 	- Has a poller to check for updates from binary server !
+
+https://github.com/heetch/s3update
+- Updates golang apps via s3
+- Uses the golang Verson flag: "go build -ldflags "-X main.Version=111" main.go"
+
+
 
 ## How to run Alpha, beta and stable ?
 
@@ -102,13 +120,29 @@ Standard stuff.
 
 Just the same serving semantics as Flutter Web.
 
+
+https://liveaverage.com/projects/integration-mermaid/
+- AMP and mermaid. Basically perfect !!
+
 ### Sequence diagrams
+
+https://mermaid.ink/
 
 https://github.com/mermaid-js 
 - is kick arse
 - can just add links to Markdown.
 - Edit and View have identical except for the URL have "View" or Edit in it.
 	- SO there is no storage, and its all encoded in the URL :) 
+
+https://github.com/mermaid-js/mermaid-live-editor
+- Need to embed this in the golang server itself, as its acts as docs and makes interpreting the Telemetry easy.
+- Users
+	- https://github.com/hello2mao/go-common/blob/master/incubator/fsm/utils.go
+
+	- https://github.com/Heiko-san/mermaidgen
+		- https://github.com/Heiko-san/mermaidgen/blob/master/gantt/Gantt_test.go#L101
+
+
 
 View:
 https://mermaid-js.github.io/mermaid-live-editor/#/view/eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG4gICAgTm9kZSBBLT4-RHJpdmVyIEE6IEVtaXQgVG8gYERyaXZlciBCYFxuICAgIERyaXZlciBBLT4-UHJvdmlkZXIgQTogRmluZCBQcm92aWRlcnNcbiAgICBOb3RlIG92ZXIgRHJpdmVyIEEsUHJvdmlkZXIgQTogYERyaXZlciBBYCBpcyBsb29raW5nIGZvciBgRHJpdmVyIEJgXG4gICAgcGFydGljaXBhbnQgTmV0d29ya1xuICAgIFByb3ZpZGVyIEEtLT4-K1Byb3ZpZGVyIEI6IEJyb2FkY2FzdCBQZWVySW5mb1xuICAgIE5vdGUgb3ZlciBQcm92aWRlciBBLFByb3ZpZGVyIEI6IGBQcm92aWRlciBBYCBCcm9hZGNhc3QgaGlzIElEIG92ZXIgdGhlIE5ldHdvcmsgdG8gZmluZCBgUHJvdmlkZXIgQmBcbiAgICBsb29wIEhhbmRsZSBQcm92aWRlclxuICAgICAgIFByb3ZpZGVyIEItPj5Qcm92aWRlciBBOiBDb25uZWN0XG4gICAgICAgUHJvdmlkZXIgQi0-PlByb3ZpZGVyIEE6IFNlbmQgYmFjayBQZWVySW5mb1xuICAgICAgIE5vdGUgb3ZlciBQcm92aWRlciBBLFByb3ZpZGVyIEI6IGBQcm92aWRlciBCYCBSZWNlaXZlIHRoZSBicm9hZGNhc3QgYW5kIHRyeSB0byBjb25uZWN0IHRvIGBQcm92aWRlciBBYFxuICAgIGVuZFxuICAgIFByb3ZpZGVyIEEtPj4rRHJpdmVyIEE6IExpc3Qgb2YgcHJvdmlkZXJzXG4gICAgTm90ZSBvdmVyIFByb3ZpZGVyIEEsRHJpdmVyIEE6IGBQcm92aWRlciBCYCBQZWVySW5mb1xuICAgIGxvb3AgZm9yIGVhY2ggcHJvdmlkZXJzXG4gICAgICAgRHJpdmVyIEEtPj5Ecml2ZXIgQjogQ29ubmVjdFxuICAgICAgIERyaXZlciBBLT4-RHJpdmVyIEI6IE9wZW4gQSBzdHJlYW1cbiAgICAgICBEcml2ZXIgQS0-PkRyaXZlciBCOiBTZW5kIEV2ZWxvcGVcbiAgICAgICBOb3RlIG92ZXIgRHJpdmVyIEEsRHJpdmVyIEI6IFNlbmQgdGhlIGVudmVsb3BlIHRvIERyaXZlciBCXG4gICAgZW5kXG4gICAgbG9vcCBIYW5kbGUgRW52ZWxvcGVcbiAgICAgICBEcml2ZXIgQi0-Pk5vZGUgQjogUmVjZWl2ZSBlbnZlbG9wZVxuICAgIGVuZFxuIiwibWVybWFpZCI6eyJ0aGVtZSI6ImRlZmF1bHQifX0

@@ -1,47 +1,45 @@
 # Embed
 
+This is about our need to embed some functionality in the Flutter clients ( web, mobile and Desktop),
+because certain libs just dont exist in Dart.
+
+
 If we embed then we need to provide a Protobuf based layer to:
 - Networking
 - DB
 - data PUB SUB and RPC
 - image file upload and download.
+- crypto things.
 
-## Why ?
 
-- Removes the need for Envoy, GRPC and GRPC-Web
-	- We can still use Protobufs and its code gen to good things.
 
-- Has its own JWT Server and Store.
+## crypto
 
-- Can do messaging and RPC patterns.
-	- Images / Blobs can use File chunking.
+We need to sign messages locally, so that the Servers are only holding encrypted data,
+and thus protecting users privacy
 
-- Much less resource use. SO is faster on smaller devices.
-
-Example
 - https://github.com/jerson/flutter-openpgp
-
-## Hosting
-
-https://www.pulumi.com/docs/intro/cloud-providers/hcloud/
-https://github.com/pulumi/pulumi-hcloud
+	- works on Web, Mobile and Desktop
+	- Has been tested and works very well
+	- Will need integration to main code but should be easy.
 
 
-- k3 powered cloud: https://www.civo.com/blog/kube100-is-here
+# Out of Scope
 
-- scenarios for k3s: https://thenewstack.io/how-rancher-labs-k3s-makes-it-easy-to-run-kubernetes-at-the-edge/
-	- Looks like it fits our usage perfectly but not for ONPremise
-	- OnPremise needs to be able to run on a Desktop without docker.
+Everything below is out of scope because we decided to stick with Flutter doing everything else.
 
-- Use Terraform to rollout k3s
-	- https://github.com/xunleii/terraform-module-k3s
-	- suppots hertzner and apparently works really well.
+But the notes are below in case we want to pick it up again.
 
-- There is NO ENvoy, but only Traefik, so the dockers must hold the Envoy OR we dont use GRPC-Web
+The reason for even attempting this is two fold:
+1. Easier development because Flutter is just a View, with everything else being handled by golang
+- So we are less reliant on Flutter Devs
+2. Can change from Flutter to GIO, react or anything if need be
+- Its not that we really would, but its very useful for future extensibility and future proofing.
 
-- I think there is no CSI, Rook ? 
 
-## Networking
+
+
+## Networking 
 
 NATS OR GRPC-web replaced to use Websockets that can work with WASM
 
