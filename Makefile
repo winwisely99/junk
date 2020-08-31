@@ -56,11 +56,13 @@ git-add:
 
 ## git-commit: commit all changes locally.
 git-commit:
+	# commit all files with a message
 	git commit -a
 
 ## git-push: push changes to your origin.
 git-push:
-	
+	# Not needed..
+
 
 
 ## git-sync: merge upsteam and send a PR.
@@ -81,6 +83,7 @@ git-sync:
 	git push origin $(GIT_BRANCH)
 
 	# 5. Make a PR from your origin Github Web GUI.
+	open https://github.com/joe-getcouragenow
 	open https://github.com/getcouragenow/junk
 
 
