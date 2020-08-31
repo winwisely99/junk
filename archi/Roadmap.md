@@ -4,56 +4,63 @@
 
 ### Stage 1
 
-Web App
-- Web site built with existing Flutter bits
-- 100% Read ONLY.
-	- No Auth or Authz needed.
-- Envoy and GPC-web
-	- Must get Envoy and Lets Encrypt working.
-	- Try to get Improbable working so we dont need envoy.
-		- will make it easy to do the Lets Encrypt then also !!
-- Data calls are GRPC
-- Blob calls are HTTP calls.
-- Golang Server does
-	- Auth and Authz. Is passed through by Envoy
-- White listing
-	- Check the URL the call is from  and only return data they own.
-	- Assume not other changed needed.
+We cant break the existing K8 deployment yet !
 
-Native App
-- Native only.
-- Requires Singing and local CI, etc.
-- Envoy and GRPC
-	- Can do the required
-- No DB. So much be connected to work.
-- No Golang. Not needed since NO DB and not holding ANY data.
-- Data calls
-	- Uses GRPC for all IO to Server.
-	- We can code gen both sides.
-- Blob calls
-	- Uses HTTP
-- Envoy not needed because no Web
-- Auth and Authz done at golang level
-	- Requires JWT stuff on both sides though.
+CI
+- Put all code in packages so make builds easy
+	- so move https://github.com/getcouragenow/core-runtime into Packages repo.
+- Make a new Entry point, because we will need to change stuff.
+	- https://github.com/getcouragenow/packages/tree/master/maintemplate/server
+	- Make "serverlocal"
+		- copy stuff in
+- Make a new Github Action that uses that New entry point.
+	- Must produce a Release.
+- Get Hertzner going with a deploy of the initial binary
+- Then get autoupdates from the deployed binary looking to the Github releases
+	 - See CI/UpdateProecess..
 
+Admin URL
+- We want to do all new code in the Admin Url for now
+- Add Flutter Package and routing
+- No auth on it for now. Will add later once JWT done.
+- For all the bits below, allow the GUI to create Test data in the system.
+	- This makes it easy for use to quickly prototype
+	- Make it also able to be used at a CLI level.
+	- Both are using GRPC.
 
-### Stage 2
+Auth & Authz
+- Add "Admin/Users" flutter route
+- Add a DB sub route called "Auth"
+- Add basic Auth modelling to Badger with GRPC CRUD
+- Add FLutter Layer to enable managing Users
+- DO the same as Auth but adding Roles, Permissions.
+- Roles map to Users
+	- Admin, Users
+- Permissions map to Roles.
+	- Use namespace to describe: Org and its Projects
+- SO we are modelling what roles a user has over each Org and its projects
 
-Make the App Read only when offline.
+JWT
+- Add "Admin/jwt" flutter route
+- Now we can build the JWT and Signup, Signin stage
+- Make a GUi where we can signin and out and see the Data
+	- Its meant as a developer tool
+- Once this is working we can use the same code for the Real JWT code in FLutter and share code.
 
-- Add a client side cache.
-- Will need cache for data and blobs.
-- Change client calls to hit cache and do pass through calls to Server.
-- Change relay logic on Server
+	
+Layer 1 Enrollment
+- Make Domain Model for Supply / Demand. Check with Rosie.
+- Make a Admin/Orgs route
+- Create Orgs and Project GUi and DB
+- Create the Supply / Demand GUI and DB
+- Need File upload / Download
+	- use DB for File mapping and local disk for Files
+	- use badger Subscribe functionality and a Task go routine to spread the files to other servers.
+- Once down modify the existing Flutter Frontend to use it.
 
+Layer 1 Dashboard
+- Now we can get the dashboard using the Supply/Demand data
 
-### Stage 3
-
-Make the App Read / Write when offline
-
-- Add a client side DB or KV store.
-- Add CRDT style logic
-- All Modules must be changed to support CRDT Ops style. Lots of work.
 
 
 ### Ideal Deployment topology
@@ -70,24 +77,18 @@ Gateway (ours)
 - SO a user that is a member of many Orgs
 	- they connect to our gateway
 	- We hold a tunnel connection to all their Orgs backend
-		- As messages come through we intermix them corectly.
+		- As messages come through we intermix them correctly.
 - This Archi makes using NATS between Us and the Org Servers really compelling because everything is Async, and so the connectivity issues between Us and the Org servers are much more stable.
 
-Tunnel (on ours and theirs)
+Tunnel ( on ours and theirs )
+
 - Candidate:
 	- https://github.com/jpillora/chisel
 		- https://github.com/sumitkolhe/kintocli
 			- Has AUTH
 		- https://github.com/ryotarai/mallet/
-		
-Daemonisation ( on theirs)
-- Will be needed for Orgs to run the binaries reliably.
-- Candidates
-	- https://github.com/takama/daemon
-		- Has proper suppot for MAC and Windows
 
-
-Backend ( on theirs)
+Relay Server ( on theirs )
 - Run by Orgs
 - Needs to run as a single binary
 - GRPC with embedded

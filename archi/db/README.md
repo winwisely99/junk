@@ -16,7 +16,7 @@ Properties we need:
 	- Dont need backup and restore, but simply snapshot to S3, so that before any upgrade we can snapshot.
 - Client Replication:
 	- Would be even better if can do style CRDT replication. ( e.g Fossil: https://fossil-scm.org/home/doc/trunk/www/concepts.wiki#workflow )
-	- Or just put in a higher level layr like Yorkie, basd onthe Change events
+	- Or just put in a higher level layer like Yorkie, basd onthe Change events
 
 
 Awesome GO Storage !!
@@ -25,11 +25,12 @@ https://githublists.com/lists/gostor/awesome-go-storage
 
 
 github.com/asdine/genji
-- users: https://github.com/Megalithic-LLC/emaild
+- users: 
+	- https://github.com/Megalithic-LLC/emaild
+	- NO Others, and so genjo is still way too risky !!
 - SQL and KV
 - NO replication,but maybe can use dragonboat https://github.com/lni/dragonboat as i suggest here: https://github.com/genjidb/genji/issues/155
-- HUGE problme is that NO one is using it yet, so risky....
-
+- HUGE problem is that NO one is using it yet, so risky....
 
 
 
@@ -61,10 +62,9 @@ https://github.com/rqlite/rqlite
 https://github.com/synw/sqlcool#changefeed
 
 
-KV
-
 https://github.com/prologic/bitcask
 - embedded
+- Used in Production and i knwo the dev very well.
 
 https://github.com/prologic/bitraft
 - server with redis API.
@@ -130,6 +130,24 @@ pebble
 - Users
 	- https://github.com/256dpi/turing
 		- not used by anything else.
+
+
+## SQL-Lite and MySQL
+
+https://gorm.io/docs/v2_release_note.html
+- New improved and clean
+
+https://github.com/flike/kingbus
+- supports Canal: https://github.com/alibaba/canal
+
+
+TIdb
+- MySQL compatible.
+- Install and OPS: https://github.com/pingcap/tiup
+- ChangeFeed: https://github.com/pingcap/ticdc
+	- Need to tap it here: https://github.com/pingcap/ticdc/tree/master/kafka_consumer
+	- Write our own consumer and then put onto NATS.
+	
 
 
 

@@ -52,6 +52,7 @@ Currently using Google Domains.
 ## DDOS Attacking
 
 We have Google Project Shield sponsoring and so we can use this.
+- https://projectshield.withgoogle.com/sites
 
 https://www.techradar.com/news/best-ddos-protection
 
@@ -60,15 +61,18 @@ https://support.projectshield.withgoogle.com/s/article/Set-up-your-website-with-
 How can we automate updating the Certs to Project Shield ?
 - Sent Stef an email about it and waiting to hear..
 
+Need to setup Firewalls rules automatically on each of our Servers to limit trafic ONYL to Project Shield
+-  35.235.224.0 / 20
+- See bottom of page: https://support.projectshield.withgoogle.com/s/article/Set-up-your-website-with-Project-Shield?language=en_US
 
 ## Load balancing
 
-Will be needed 
-- Hate needing to put a load balancer in front. SPOF ( Single Point of Failure)
-- Envoy can do it BUT very hard to control.
+Will be needed.
+- Hate needing to put a load balancer in front. SPOF ( Single Point of Failure )
+- Envoy can do it BUT very hard to control
 - Investigate other options.
 
-We want DNS load balancing for GRPC, HTTP traffic.
+SO use DNS load balancing for GRPC, HTTP traffic.
 - HTTP will be handled by the CDN on Google ( see above )
 - What abut GRPC to our Origin Servers ?
 

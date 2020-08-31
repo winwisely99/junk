@@ -129,9 +129,6 @@ https://github.com/jpillora/dynflare
 
 
 
-
-
-
 ### Network Transport
 
 We use TLS 1.3 / HTTPS with Certs auto provisioned from Lets Encrypt.
