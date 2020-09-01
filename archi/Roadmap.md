@@ -19,6 +19,28 @@ CI
 - Then get autoupdates from the deployed binary looking to the Github releases
 	 - See CI/UpdateProecess..
 
+
+Validate DB (https://github.com/mkawserm/flamed)
+- https://raw.githubusercontent.com/mkawserm/flamed/master/document/architecture/diagram/v0.1.0.svg
+	- It looks pretty close to perfect.
+- Work out its config 
+	- It has a hell of alot of config options.
+- Run many
+	- add follower
+	- kill one and see catchup
+	- basic scripts to do all this.
+- Subscribe
+	- to replace NATS we need to check Badger Subscribe works with it.
+- Concurrency
+	- if a Subscribe happens, then we only want it to fire on one server, otherwise they will all do it, and one message will turn in many.
+	- Same with jobs.
+	- SO need some sort of basic locking pattern. Might be in the existing code. Gotta check.
+- Practical extending
+	- Our own golang main to import it.
+	- We can add stuff on top.
+		- It uses GraphQl as its pubic API, which is awesome but we want to use GRPC, and so we should easily be able to add that on top.
+
+
 Admin URL
 - We want to do all new code in the Admin Url for now
 - Add Flutter Package and routing
@@ -38,28 +60,28 @@ Auth & Authz
 	- Admin, Users
 - Permissions map to Roles.
 	- Use namespace to describe: Org and its Projects
-- SO we are modelling what roles a user has over each Org and its projects
+- So we are modelling what roles a user has over each Org and its projects.
 
 JWT
 - Add "Admin/jwt" flutter route
 - Now we can build the JWT and Signup, Signin stage
 - Make a GUi where we can signin and out and see the Data
 	- Its meant as a developer tool
-- Once this is working we can use the same code for the Real JWT code in FLutter and share code.
+- Once this is working we can use the same code for the Real JWT code in Flutter and share code.
 
-	
+
 Layer 1 Enrollment
 - Make Domain Model for Supply / Demand. Check with Rosie.
-- Make a Admin/Orgs route
-- Create Orgs and Project GUi and DB
-- Create the Supply / Demand GUI and DB
+- Make a Admin/Orgs route.
+- Create Orgs and Project GUI and DB.
+- Create the Supply / Demand GUI and DB.
 - Need File upload / Download
-	- use DB for File mapping and local disk for Files
-	- use badger Subscribe functionality and a Task go routine to spread the files to other servers.
+	- Use DB for File mapping and local disk for Files.
+	- Use badger Subscribe functionality and a Task go routine to spread the files to other servers.
 - Once down modify the existing Flutter Frontend to use it.
 
 Layer 1 Dashboard
-- Now we can get the dashboard using the Supply/Demand data
+- Now we can get the dashboard using the Supply/Demand data.
 
 
 
