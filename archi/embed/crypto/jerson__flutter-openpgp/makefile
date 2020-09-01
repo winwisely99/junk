@@ -1,7 +1,7 @@
 
 # https://github.com/jerson/flutter-openpgp
 
-include ./../../root.mk
+# NOTE: currently only the tagged version works, so use "make dep-tag".
 
 LIB_ORG=				github.com/jerson
 LIB_ORG_FSPATH=			$(GOPATH)/src/$(LIB_ORG)
@@ -13,17 +13,14 @@ LIB_GO_TAG=					v0.7.1
 LIB_FLU_NAME=				flutter-openpgp
 LIB_FLU_TAG=				v0.9.9
 
-### CALC
-BIN_FSPATH=$(PWD)/bin
-DATA_FSPATH=$(PWD)/data
 
-LIB_GO_SPATH=$(LIB_ORG_FSPATH)/$(LIB_GO_NAME)
+LIB_GO_FSPATH=$(LIB_ORG_FSPATH)/$(LIB_GO_NAME)
 
 LIB_FLU_SAMEPLE_FSPATH=$(LIB_ORG_FSPATH)/$(LIB_FLU_NAME)/example
 
 
 
-this-print:
+print:
 	@echo 
 	@echo LIB_ORG: 				$(LIB_ORG)
 	@echo LIB_ORG_FSPATH: 		$(LIB_ORG_FSPATH)
@@ -39,22 +36,23 @@ this-print:
 	@echo LIB_FLU_TAG: 			$(LIB_FLU_TAG)
 	@echo 
 
-this-git-clone:
-	# go
-	$(MAKE) git-clone-args LIB=$(LIB_ORG)/$(LIB_GO_NAME) LIB_FSPATH=$(LIB_ORG_FSPATH)/$(LIB_GO_NAME)
+dep-tag: dep
+	 #go
 	cd $(LIB_ORG_FSPATH)/$(LIB_GO_NAME) && git fetch --all --tags --prune
 	cd $(LIB_ORG_FSPATH)/$(LIB_GO_NAME) && git checkout tags/$(LIB_GO_TAG)
 
 	# flu
-	$(MAKE) git-clone-args LIB=$(LIB_ORG)/$(LIB_FLU_NAME) LIB_FSPATH=$(LIB_ORG_FSPATH)/$(LIB_FLU_NAME)
 	cd $(LIB_ORG_FSPATH)/$(LIB_FLU_NAME) && git fetch --all --tags --prune
 	cd $(LIB_ORG_FSPATH)/$(LIB_FLU_NAME) && git checkout tags/$(LIB_FLU_TAG)
+dep:
+	# go
+	git clone https://$(LIB_ORG)/$(LIB_GO_NAME) $(LIB_ORG_FSPATH)/$(LIB_GO_NAME)
 
+	# flu
+	git clone https://$(LIB_ORG)/$(LIB_FLU_NAME) $(LIB_ORG_FSPATH)/$(LIB_FLU_NAME)
 
-this-git-delete:
+dep-delete:
 	rm -rf $(LIB_ORG_FSPATH)
-
-
 
 this-vscode-add:
 	# copy vscode debug json into project
@@ -68,7 +66,7 @@ this-vscode-add:
 	code --add $(LIB_ORG_FSPATH)
 
 
-this-vscode-open:
+vscode-open:
 
 	# open vscode
 	code $(LIB_ORG_FSPATH)
@@ -77,10 +75,18 @@ this-vscode-open:
 
 ### GO
 	
-this-go-dep:
-	cd $(LIB_GO_SPATH) && $(MAKE) gomobile
-this-go-build: 
-	cd $(LIB_GO_SPATH) && $(MAKE) all
+go-dep:
+	# install gomobile 
+	cd $(LIB_GO_FSPATH) && $(MAKE) gomobile
+go-build: 
+	# clean binding android ios wasm
+	cd $(LIB_GO_FSPATH) && $(MAKE) clean
+	cd $(LIB_GO_FSPATH) && $(MAKE) binding
+	# Android is broken on my machine due to freaking Java dependency.
+	# TODO Get Docker based one working !!
+	#cd $(LIB_GO_FSPATH) && $(MAKE) android
+	cd $(LIB_GO_FSPATH) && $(MAKE) ios
+	cd $(LIB_GO_FSPATH) && $(MAKE) wasm
 
 
 
@@ -88,7 +94,7 @@ this-go-build:
 
 FLU_PROJECT_NAME=openpgp_example
 
-this-flu-dep:
+flu-dep:
 	# flu
 	flutter channel master
 	flutter upgrade --force
@@ -103,43 +109,42 @@ this-flu-dep:
 	go get -u github.com/shurcooL/goexec
 
 
-
 ## WEB
-this-flu-web-run:
+flu-web-run:
 	cd $(LIB_FLU_SAMEPLE_FSPATH) && flutter run -d chrome
-	#cd $(LIB_FLU_SAMEPLE_FSPATH) && 	flutter run --release --dart-define=FLUTTER_WEB_USE_SKIA=true -d chrome
-this-flu-web-build:
+	#cd $(LIB_FLU_SAMEPLE_FSPATH) && flutter run --release --dart-define=FLUTTER_WEB_USE_SKIA=true -d chrome
+flu-web-build:
 	flutter config --enable-web
 	cd $(LIB_FLU_SAMEPLE_FSPATH) && flutter build web --release
-this-flu-web-buildwasm:
+flu-web-buildwasm:
 	flutter config --enable-web
 	cd $(LIB_FLU_SAMEPLE_FSPATH) && flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true
-this-flu-web-open:
+flu-web-open:
 	open http://localhost:8080
 	cd $(LIB_FLU_SAMEPLE_FSPATH)/build && goexec -quiet 'http.ListenAndServe(":8080", http.FileServer(http.Dir("web")))'
 
 
 ## DESK
-this-flu-desk-run:
+flu-desk-run:
 	cd $(LIB_FLU_SAMEPLE_FSPATH) && hover plugins get 
 	cd $(LIB_FLU_SAMEPLE_FSPATH) && hover run
-this-flu-desk-build:
+flu-desk-build:
 	cd $(LIB_FLU_SAMEPLE_FSPATH) && hover plugins get 
 	cd $(LIB_FLU_SAMEPLE_FSPATH) && hover build darwin
-this-flu-desk-open:
+flu-desk-open:
 	open $(LIB_FLU_SAMEPLE_FSPATH)/go/build/outputs/darwin/openpgp_example
 
 ## MOB
 
-this-flu-mob-list:
+flu-mob-list:
 	flutter devices
-this-flu-and-run:
+flu-and-run:
 	# java eror :)
 	cd $(LIB_FLU_SAMEPLE_FSPATH) && flutter run -d "Nexus 5X (mobile)"
-this-flu-ios-run:
+flu-ios-run:
 	# works
 	cd $(LIB_FLU_SAMEPLE_FSPATH) && flutter run -d iPhone
-this-flu-ios-clean:
+flu-ios-clean:
 	# this is sometimes needed
 	# pod clean
 	cd $(LIB_FLU_SAMEPLE_FSPATH)/ios && rm -f ./Podfile.lock
@@ -150,7 +155,7 @@ this-flu-ios-clean:
 	cd $(LIB_FLU_SAMEPLE_FSPATH) && flutter build ios
 	
 	cd $(LIB_FLU_SAMEPLE_FSPATH)/ios && pod install
-this-flu-mob-build:
+flu-mob-build:
 	# ios
 	# https://flutter.dev/docs/deployment/ios
 	# change to ios 11 in xcode for runner and pods

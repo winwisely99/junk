@@ -1,6 +1,6 @@
 # https://github.com/256dpi/turing
 
-# DOES NOT WORK. Needs ROcks DB
+# DOES NOT WORK. Needs ROcks DB, so forget this repo.
 
 BIN=$(PWD)/bin
 
