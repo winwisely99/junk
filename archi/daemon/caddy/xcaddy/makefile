@@ -1,5 +1,6 @@
 # https://github.com/caddyserver/xcaddy
 
+# NOTE: Must build from master and build with master. Go 1.5 thing.
 
 GO_OS 		:= $(shell go env GOOS)
 GO_ARCH		:= $(shell go env GOARCH)
@@ -15,7 +16,7 @@ LIB_XBIN=$(LIB_BIN_FSPATH)/xcaddy-$(GO_OS)-$(GO_ARCH)
 LIB_BIN=$(LIB_BIN_FSPATH)/caddy-$(GO_OS)-$(GO_ARCH)
 
 #CADDY_CORE_VERSION=v2.1.1
-CADDY_CORE_VERSION=v2.2.0-rc.1
+CADDY_CORE_VERSION=master
 PLUGIN_ROUTE53_VERSION=v1.0.2
 
 export GO111MODULE=on
@@ -62,10 +63,8 @@ build-delete:
 ## Build CADDY
 
 xcaddy-build:
+	# force master
 	$(LIB_XBIN) build master \
-		--output $(LIB_BIN)
-
-	#$(LIB_XBIN) build \
 		--with "github.com/caddy-dns/route53@${PLUGIN_ROUTE53_VERSION}" \
 		--output $(LIB_BIN)
 
