@@ -62,7 +62,10 @@ build-delete:
 ## Build CADDY
 
 xcaddy-build:
-	$(LIB_XBIN) build \
+	$(LIB_XBIN) build master \
+		--output $(LIB_BIN)
+
+	#$(LIB_XBIN) build \
 		--with "github.com/caddy-dns/route53@${PLUGIN_ROUTE53_VERSION}" \
 		--output $(LIB_BIN)
 
