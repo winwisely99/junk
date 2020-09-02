@@ -1,0 +1,7 @@
+[
+	{
+	  "id": "webhook",
+	  "execute-command": "./hook.zsh",
+	  "command-working-directory": "./src"
+	}
+  ]

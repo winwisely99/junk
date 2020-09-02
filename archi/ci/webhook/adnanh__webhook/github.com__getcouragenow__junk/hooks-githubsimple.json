@@ -1,0 +1,31 @@
+[
+	{
+		"id": "webhook",
+		"execute-command": "/Users/apple/workspace/go/src/github.com/joe-getcouragenow/junk/archi/ci/webhook/adnanh__webhook/github.com__getcouragenow__junk/src/hook.zsh",
+		"command-working-directory": "/Users/apple/workspace/go/src/github.com/joe-getcouragenow/junk/archi/ci/webhook/adnanh__webhook/github.com__getcouragenow__junk/src",
+		"incoming-payload-content-type": "application/json",
+		"include-command-output-in-response": true,
+		"include-command-output-in-response-on-error": true,
+		"response-message": "I got the payload!",
+		"response-headers": [
+			{
+				"name": "Access-Control-Allow-Origin",
+				"value": "*"
+			}
+		],
+		"pass-arguments-to-command": [
+			{
+				"source": "payload",
+				"name": "head_commit.id"
+			},
+			{
+				"source": "payload",
+				"name": "pusher.name"
+			},
+			{
+				"source": "payload",
+				"name": "pusher.email"
+			}
+		]
+	}
+]
