@@ -19,6 +19,77 @@ Properties we need:
 	- Or just put in a higher level layer like Yorkie, basd onthe Change events
 
 
+## HA Story
+
+This design avoids needing any Load Balancer, which is a SPOF and costly also.
+
+The main binary can run as different Service Types. Easy to do via start up flag.
+- This allows us to essentially shard the system and so scale at that granularity. We know its easy to shard our domain because it is very simple domain model.
+- So we only have ONE binary for the whole system, but when they start up they act as a Service type.
+
+So every server instance in the system has a Global public DNS entry.
+- When they boot they register automatically on Cloudflare 
+	- Easy with this: https://github.com/textileio/textile/blob/master/dns/dns.go
+	- We use Cloudflare because Google Domains does NOT allow on the fly Domain name alterations from a API.
+
+So and Example is:
+- https://001.users.alpha.exampledomain.com
+- <serviceid>.<servicetype>.<versionchannel>.examplecoman.com
+
+"versionchannel" can be
+- alpha
+- beta
+- stable
+
+
+The 2 followers can run on a Different DC, and so give us HA that is resident to global network disruption, which happens a few times a year.
+- So we can run in shitty DC's that are not multi honed.
+- Its going to be a little slower but its fine.
+
+We then run a Global Endpoint discovery system on Google ( global bucket with their LB in front, and a simple go binary ) that simply records which is the Master endpoint for each Service.
+- This must be linked to the RAFT system so that it is told when a new Master is elected.
+- This binary Runon on Google is the exact same binary we deplyo everywhere, but running as a Disco and using only a bucket.
+- called: https://disco.exampledomain.com
+	- We can hold the endpoints for alpha, beta and stable on it.
+
+The Clients then need to know the Endpoint for a Service and when it changes. They look to the Google Endpoint system.
+- All we do is use the PUB SUB system to send them an update when the last one changes.
+- When they starup they always ask it.
+- Mutations go to Master and Queries go to Followers
+	- lowers load on Master drastically.
+- Clients hold data and blob caches also which lowers load.
+- We can use a Protobuf to hold all that info
+
+
+
+## CI / CD Story
+
+The CI folder has the CI code already. See Webhook folder.
+- It can run on a Mac at anyone'ss house and sign all the code and so not leak any Secrets to the world.
+
+The binaries are designed to look at a Server for updates. They poll once a minute.
+Now thats fine, but it will mean outages and non deterministic updates.
+
+So, we augment it with a basic controller, that is a bit like NATS.
+
+The Google global disco system is the perfect thing to us, because its the only thing presumed to be always up.
+It can do:
+1. Staggered updates for a service.
+2. Shifting a version channel to a new version, such as upgrading alpha from v1.1.4 to v1.2.0
+
+A CLI or Web Admin can be easily added to this.
+
+Staggered updates logic ( very fuzzy still !!!):
+- Check how many of a instances of service there are. Typically 3
+- Broadcast a "HOLD and wait" to connected clients. So they hold while we upgrade for 1 second.
+- Tell each Server to update
+- Broadcast a "Service updated to all clients.
+
+
+
+
+
+## LIBS
 Awesome GO Storage !!
 
 https://githublists.com/lists/gostor/awesome-go-storage
