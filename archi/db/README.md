@@ -19,7 +19,9 @@ Properties we need:
 	- Or just put in a higher level layer like Yorkie, basd onthe Change events
 
 
-## HA Story
+## Disco / HA Story
+
+See the Archi/CI/Disco folder for implemenation.
 
 This design avoids needing any Load Balancer, which is a SPOF and costly also.
 
@@ -48,9 +50,12 @@ The 2 followers can run on a Different DC, and so give us HA that is resident to
 
 We then run a Global Endpoint discovery system on Google ( global bucket with their LB in front, and a simple go binary ) that simply records which is the Master endpoint for each Service.
 - This must be linked to the RAFT system so that it is told when a new Master is elected.
-- This binary Runon on Google is the exact same binary we deplyo everywhere, but running as a Disco and using only a bucket.
+- This binary Runon on Google is the exact same binary we deploy everywhere, but running as a Disco and using only a bucket.
 - called: https://disco.exampledomain.com
 	- We can hold the endpoints for alpha, beta and stable on it.
+- Google Disco looks perfect !
+	
+
 
 The Clients then need to know the Endpoint for a Service and when it changes. They look to the Google Endpoint system.
 - All we do is use the PUB SUB system to send them an update when the last one changes.
@@ -93,6 +98,9 @@ Staggered updates logic ( very fuzzy still !!!):
 Awesome GO Storage !!
 
 https://githublists.com/lists/gostor/awesome-go-storage
+
+
+
 
 
 github.com/asdine/genji
@@ -161,6 +169,12 @@ Badger
 AuthZ rules
 https://github.com/attestantio/dirk/tree/master/rules
 - This looks pretty clean and uses badger.
+
+Uses Cete with users Badger RAFT
+https://github.com/vniche/users-microservice
+- based on Cete which is Badger and Raft with a GRPC API: https://github.com/mosuka/cete
+
+
 
 
 

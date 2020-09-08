@@ -63,7 +63,7 @@ https://sbis04.github.io/explore/#/
 		- Doc: https://medium.com/flutter-community/flutter-implementing-google-sign-in-71888bca24ed
 		- works well for us
 - Dev:
-	- Single page loads everyting: https://github.com/sbis04/explore/blob/master/lib/screens/home_page.dart
+	- Single page loads everything: https://github.com/sbis04/explore/blob/master/lib/screens/home_page.dart
 
 ## Signin
 

@@ -10,3 +10,14 @@ Inlets
 https://github.com/jpillora/chisel
 - Now has UDP support which is very important.
 
+## Chisel
+
+https://github.com/kintohub/kinto-cli/blob/master/internal/api/chisel.go
+- used to ssh into remote stuff anywhere.
+
+https://github.com/yudete/chisel-gui
+
+https://github.com/ryotarai/mallet
+- simple wrapper over chisel to make it easier.
+
+

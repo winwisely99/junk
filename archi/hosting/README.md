@@ -7,6 +7,9 @@ https://github.com/hetznercloud/cli
 - Iceland and Germany is just enough for base Servers to have enough Privacy
 - Is dirt cheap shitty servers but should be fine since we have RAFT data synchronisation
 
+https://github.com/promhippie/prometheus-hcloud-sd
+- finds all Prometheus nodes in HCloud.
+
 ## Deploy to Google
 
 For anything infra we need to run everything on Hetzner
