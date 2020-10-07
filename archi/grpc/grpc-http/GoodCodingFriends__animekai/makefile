@@ -39,7 +39,7 @@ flu-print:
 
 gen:
 	cd $(LIB_FSPATH) && protoc -Iproto proto/chat_service.proto \
-		--go_out=plugins=grpc:gms-go/rpc \
+		--go-grpc_out=gms-go/rpc \
 		--dart_out=grpc:gms-flutter/lib/rpc
 
 grpc-evans:

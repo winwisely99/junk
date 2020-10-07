@@ -78,7 +78,7 @@ help:
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
 ## Print
-this-print:
+grpc-print:
 	@echo
 	@echo -- Envoy --
 	@echo LIB_ENVOY_REPO_FSPATH: 		$(LIB_ENVOY_REPO_FSPATH)
@@ -111,9 +111,15 @@ this-print:
 
 	@echo
 
-	
+## All
+grpc-all:
+	$(MAKE) grpc-all-git-delete
+	$(MAKE) grpc-all-git-clone
+	$(MAKE) grpc-all-build
+	$(MAKE) grpc-which
+
 ## Which
-this-which:
+grpc-which:
 	@echo
 	@echo -- envoy --
 	@which envoy
@@ -132,7 +138,8 @@ this-which:
 
 	@echo
 	@echo -- protoc --
-	@echo protoc --version
+	@which protoc
+	protoc --version
 	@echo
 
 	@echo
@@ -157,7 +164,7 @@ this-which:
 
 
 ## All-git-clone
-this-all-git-clone:
+grpc-all-git-clone:
 	# Envoy
 	# See: https://github.com/pomerium/pomerium/blob/master/Makefile
 	# this installs the getter into the GOBIN
@@ -179,7 +186,7 @@ this-all-git-clone:
 	git clone https://$(LIB_GRPC_GATEWAY_REPO) $(LIB_GRPC_GATEWAY_REPO_FSPATH)
 
 ## All-git-delete
-this-all-git-delete:
+grpc-all-git-delete:
 	rm -rf $(LIB_ENVOY_REPO_FSPATH)
 	rm -rf $(LIB_GRPCUI_REPO_FSPATH)
 	rm -rf $(LIB_GRPC_REPO_FSPATH)
@@ -187,25 +194,25 @@ this-all-git-delete:
 	rm -rf $(LIB_PBOLD_REPO_FSPATH)
 	rm -rf $(LIB_GRPC_GATEWAY_REPO_FSPATH)
 
-this-all-vscode-add:
-	code --add $(LIB_ENVOY_REPO_FSPATH)
-	code --add $(LIB_GRPCUI_REPO_FSPATH)
-	code --add $(LIB_GRPC_REPO_FSPATH)
-	code --add $(LIB_PB_REPO_FSPATH)
-	code --add $(LIB_PBOLD_REPO_FSPATH)
-	code --add $(LIB_GRPC_GATEWAY_REPO_FSPATH)
+grpc-all-vscode-add:
+	code --add $(LIB_ENVOY_REPO_FSPATH) --reuse-window
+	code --add $(LIB_GRPCUI_REPO_FSPATH) --reuse-window
+	code --add $(LIB_GRPC_REPO_FSPATH) --reuse-window
+	code --add $(LIB_PB_REPO_FSPATH) --reuse-window
+	code --add $(LIB_PBOLD_REPO_FSPATH) --reuse-window
+	code --add $(LIB_GRPC_GATEWAY_REPO_FSPATH) --reuse-window
 
 ## All-build
-this-all-build: this-envoy-build this-grpcli-build this-grpcui-build this-pb-build
+grpc-all-build: grpc-envoy-build grpc-grpcli-build grpc-grpcui-build grpc-pb-build
 
 ## All-delete
-this-all-delete: this-envoy-delete this-grpcli-delete this-grpcui-delete this-pb-delete
+grpc-all-delete: grpc-envoy-delete grpc-grpcli-delete grpc-grpcui-delete grpc-pb-delete
 
 
 ### ENVOY
 
 ## Envyo-build
-this-envoy-build:
+grpc-envoy-build:
 	@echo
 	@echo -- Start: Envoy build --
 	@echo
@@ -219,7 +226,7 @@ this-envoy-build:
 	@echo -- End: Envoy build --
 	@echo
 
-this-envoy-delete:
+grpc-envoy-delete:
 	@echo
 	@echo -- Start: Envoy Delete --
 	@echo
@@ -229,7 +236,7 @@ this-envoy-delete:
 
 
 ### GRPC CLI
-this-grpcli-build:
+grpc-grpcli-build:
 
 	@echo
 	@echo -- Start: grpccli build --
@@ -245,7 +252,7 @@ this-grpcli-build:
 	@echo -- End: grpccli build --
 	@echo
 
-this-grpcli-delete:
+grpc-grpcli-delete:
 	@echo
 	@echo -- Start: GRPCLI Delete --
 	@echo
@@ -254,7 +261,7 @@ this-grpcli-delete:
 	brew uninstall grpc
 
 ### GRPCUI
-this-grpcui-build:
+grpc-grpcui-build:
 	@echo
 	@echo -- Start: GRPCUI build --
 	@echo
@@ -266,7 +273,7 @@ this-grpcui-build:
 	@echo -- End: GRPCUI build --
 	@echo
 
-this-grpcui-delete:
+grpc-grpcui-delete:
 	@echo
 	@echo -- Start: GRPCUI Delete --
 	@echo
@@ -278,20 +285,20 @@ this-grpcui-delete:
 
 # Download and put into GOPATH also
 
-this-protoc-build:
+grpc-protoc-build:
 	@echo
 	@echo -- protoc --
 
 	# Protoc that is the basis
 	brew install protobuf
 
-this-protoc-delete:
+grpc-protoc-delete:
 	brew uninstall protobuf
 
 
 ### GO Protobuf generators 
 
-this-pb-build: this-protoc-build
+grpc-pb-build: grpc-protoc-build
 	@echo
 	@echo -- Start: Golang PB build --
 	@echo
@@ -317,7 +324,7 @@ this-pb-build: this-protoc-build
 	@echo -- End: Golang PB build --
 	@echo
 
-this-pb-delete: this-protoc-delete
+grpc-pb-delete: grpc-protoc-delete
 	@echo
 	@echo -- Start: Golang PB Delete --
 	@echo
@@ -333,7 +340,7 @@ this-pb-delete: this-protoc-delete
 
 ### Old GO Protobuf generators
 	
-this-pbold-build: this-protoc-build
+grpc-pbold-build: grpc-protoc-build
 	@echo
 	@echo -- Start: Golang PB-OLD build --
 	@echo
@@ -345,7 +352,7 @@ this-pbold-build: this-protoc-build
 	@echo -- End: Golang PB-OLD build --
 	@echo
 
-this-pbold-delete: this-protoc-delete
+grpc-pbold-delete: grpc-protoc-delete
 	@echo
 	@echo -- Start: Golang PB-OLD Delete --
 	@echo
@@ -355,7 +362,7 @@ this-pbold-delete: this-protoc-delete
 
 export PROTO_SOURCE_DIR="proto"
 export PROTO_SOURCE_FILE="sphynx.proto"
-this-gen:
+grpc-gen:
 	@echo Generating Protos
 	# Generate the gRPC Go interfaces using NEW compiler
 

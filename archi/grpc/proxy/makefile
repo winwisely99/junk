@@ -1,5 +1,9 @@
 # https://github.com/asishrs/proxyless-grpc-lb
 
+BOILERPLATE_FSPATH=/Users/apple/workspace/go/src/github.com/joe-getcouragenow/core-runtime/boilerplate
+include $(BOILERPLATE_FSPATH)/core/grpc.mk
+include $(BOILERPLATE_FSPATH)/core/os.mk
+
 CWD:=$(shell echo `pwd`)
 
 GO_OS 		:= $(shell go env GOOS)
@@ -9,6 +13,7 @@ GIT_VERSION	:= $(shell git describe --tags)
 LIB=github.com/asishrs/proxyless-grpc-lb
 LIB_TAG=v1.19.1
 LIB_FSPATH=$(GOPATH)/src/$(LIB)
+
 LIB_BIN_FSPATH=$(PWD)/bin
 LIB_DATA_FSPATH=$(PWD)/data
 
@@ -30,12 +35,36 @@ print:
 	@echo LIB_FSPATH : $(LIB_FSPATH)
 	@echo LIB_BIN_FSPATH : $(LIB_BIN_FSPATH)
 	@echo LIB_DATA_FSPATH : $(LIB_DATA_FSPATH)
-	@echo LIB_XBIN : $(LIB_XBIN)
-	@echo LIB_BIN : $(LIB_BIN)
+
+	@echo LIB_BIN_FSPATH : $(LIB_BIN_FSPATH)
+	@echo LIB_DATA_FSPATH : $(LIB_DATA_FSPATH)
 
 	@echo 
+
+override LIB_ENVOY_GETENVOY_VERSION:=v0.1.8
+override LIB_ENVOY_VERSION=standard:1.14.3
+
+#override LIB_GOGRPC_REPO_VERSION=v1.23.0
+#override LIB_GO_REPO_VERSION=v1.23.0
+#override LIB_GRPC_GATEWAY_REPO_VERSION=v1.23.0
+
+dep-grpc-check:
+	$(MAKE) grpc-print
+	$(MAKE) grpc-which
+	
+dep-grpc-install:
+	#$(MAKE) grpc-all-git-clone
+	$(MAKE) grpc-protoc-build
+	$(MAKE) grpc-go-build
+
+dep-grpc-delete:
+	$(MAKE) grpc-all-delete
+
 dep-os:
+	
+	# https://github.com/go-task/task 
 	brew install go-task/tap/go-task
+
 	# https://k3d.io/
 	brew install k3d
 
@@ -122,6 +151,14 @@ client-deploy:
 client-scale:
 	kubectl scale --replicas=5 deployments.apps/hello-client
 	kubectl scale --replicas=5 deployments.apps/howdy-client
+
+### LOCAL ALL
+go-build:
+	cd $(LIB_FSPATH) && task proto:gen
+	cd $(LIB_FSPATH) && task client:go-build
+	cd $(LIB_FSPATH) && task server:go-build
+go-run:
+	cd $(LIB_FSPATH)/hello-world/cmd/server && ./server
 
 
 

@@ -37,22 +37,54 @@ flu-print:
 	@echo flutter devices: 
 	flutter devices
 
-gen:
-	cd $(LIB_FSPATH) && protoc -Iproto proto/chat_service.proto \
+### GRPC
+
+grpc-dep:
+	#go get github.com/ktr0731/evans
+	# OR
+	brew tap ktr0731/evans
+	brew install evans
+
+
+grpc-gen:
+	@echo
+	# NOT working !
+	#cd $(LIB_FSPATH) && protoc -Iproto proto/chat_service.proto \
 		--go_out=plugins=grpc:gms-go/rpc \
 		--dart_out=grpc:gms-flutter/lib/rpc
+	@echo
+	@echo
+	cd $(LIB_FSPATH) && protoc -Iproto proto/chat_service.proto \
+		--go-grpc_out=gms-go/rpc \
+		--dart_out=grpc:gms-flutter/lib/rpc
+	@echo
 
 grpc-evans:
+	# CLI for GRPC
+	# Must have GRPC Reflection turns on in code.
 	evans repl $(LIB_FSPATH)/proto/chat_service.proto
 
 #  --js_out=import_style=commonjs:gms-web/src/rpc/ \
 #  --grpc-web_out=import_style=commonjs,mode=grpcwebtext:gms-web/src/rpc/ \
 
+### Server
+# :9090
+
+server-buildrun:
+	cd $(LIB_FSPATH)/gms-go/main && go build -o $(LIB_BIN)
+
 server-run:
 	cd $(LIB_FSPATH)/gms-go/main && go run .
 
+## Web tests GRPCWeb works
 flu-web-run:
 	cd $(LIB_FSPATH)/gms-flutter && flutter run -d chrome
+
+## DESK tests GRPC works
+flu-desk-init:
+	cd $(LIB_FSPATH)/gms-flutter && hover init
+flu-desk-run:
+	cd $(LIB_FSPATH)/gms-flutter && hover run
 
 flu-mob-run:
 	cd $(LIB_FSPATH)/gms-flutter && flutter run -d 
