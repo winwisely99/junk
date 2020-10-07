@@ -1,0 +1,19 @@
+version: '3'
+
+output: prefixed
+
+tasks:
+ default:
+   deps:
+     - task: print
+       vars: {TEXT: foo}
+     - task: print
+       vars: {TEXT: bar}
+     - task: print
+       vars: {TEXT: baz}
+
+ print:
+   cmds:
+     - echo "{{.TEXT}}"
+   prefix: "print-{{.TEXT}}"
+   silent: true
